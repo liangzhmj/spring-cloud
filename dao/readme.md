@@ -2,12 +2,12 @@
     简介
         该模块暂时包括redis，数据库（支持多数据源），ehcache模块，通过注解引入
         注解包括
-        @EnableBaseDao   #一般用于基本的mysql数据库，例如一下配置或者控制，参考base数据源指向api管理系统的数据库
-        @EnableServiceDao   #一般用于业务的mysql数据库
-        @EnableBothDao    #包含@EnableBaseDao,@EnableServiceDao
-        @EnableDBConfig    #使用数据库t_properties表的配置（可以选择数据源初始化）,使用DBProperties获取
-        @EnableEhcache    #使用ehcache，已经包含@EnableCaching，通过ehcache的注解使用或者通过EhcacheContext存取
-        @EnableRedisDao   #使用redisDao
+        **@EnableBaseDao**   #一般用于基本的mysql数据库，例如一下配置或者控制，参考base数据源指向api管理系统的数据库
+        **@EnableServiceDao**   #一般用于业务的mysql数据库
+        **@EnableBothDao**    #包含@EnableBaseDao,@EnableServiceDao
+        **@EnableDBConfig**    #使用数据库t_properties表的配置（可以选择数据源初始化）,使用DBProperties获取
+        **@EnableEhcache**    #使用ehcache，已经包含@EnableCaching，通过ehcache的注解使用或者通过EhcacheContext存取
+        **@EnableRedisDao**   #使用redisDao
 
 ```yml
 	#druid监听器提供druid的图形化管理界面
