@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="cat-socket" />
-        <module name="cat-ext-wechat" />
         <module name="cat-sync" />
         <module name="cat-tools" />
         <module name="tools" />
@@ -18,12 +17,13 @@
         <module name="dao" />
         <module name="mq" />
         <module name="cat-mq" />
+        <module name="cat-api-sc" />
         <module name="sync" />
         <module name="ext-wechat" />
         <module name="cat-api" />
         <module name="cat-dao" />
         <module name="api" />
-        <module name="cat-api-sc" />
+        <module name="cat-ext-wechat" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
