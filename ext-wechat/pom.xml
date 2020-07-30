@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>cat-parent</artifactId>
+        <groupId>com.liangzhmj.cat</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>cat-ext-wechat</artifactId>
+    <!--
+        <artifactId>cat-ext-wechat-admin</artifactId>
+    -->
+    <dependencies>
+        <dependency>
+            <groupId>com.liangzhmj.cat</groupId>
+            <artifactId>cat-tools</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.liangzhmj.cat</groupId>
+            <artifactId>cat-sync</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.liangzhmj.cat</groupId>
+            <artifactId>cat-dao</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.qq.aes</groupId>
+            <artifactId>qq-aes</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!--
+        与http里面的冲突
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.13</version>
+        </dependency>
+        -->
+    </dependencies>
+
+    <name>cat-ext-wechat</name>
+
+</project>

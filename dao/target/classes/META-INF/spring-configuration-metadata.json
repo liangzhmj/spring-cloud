@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "name": "spring.datasource.base",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.liangzhmj.cat.dao.mysql.config.DataSourceBase",
+      "sourceMethod": "dataSource()"
+    },
+    {
+      "name": "spring.datasource.service",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.liangzhmj.cat.dao.mysql.config.DataSourceService",
+      "sourceMethod": "serviceDatasource()"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}
