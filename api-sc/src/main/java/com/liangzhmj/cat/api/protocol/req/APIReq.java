@@ -82,7 +82,6 @@ public class APIReq extends JSONBase implements Serializable{
 		String requestStr = null;
 		try {
 //			String a = request.getParameter("a");//协议，a==1-->protobuf
-			this.crossDomain = StringUtils.getCleanInteger(request.getParameter("b"));//b=1跨域
 			in = request.getInputStream();
 			//json数据
 			requestStr = IOUtils.toString(in,"UTF-8");
