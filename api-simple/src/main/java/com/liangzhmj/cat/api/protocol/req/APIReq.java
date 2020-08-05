@@ -65,13 +65,18 @@ public class APIReq extends JSONBase implements Serializable{
 	private Session session;
 	@JSONField
 	private String sequence;
-	
+
 	public APIReq(){}
 	public APIReq(HttpServletRequest request , HttpServletResponse response){
 		this.request = request;
 		this.response = response;
 	}
-	
+
+	public void initServlet(HttpServletRequest request , HttpServletResponse response){
+		this.request = request;
+		this.response = response;
+	}
+
 	public void reciveRequest() throws Exception{
 		InputStream in = null;
 		String requestStr = null;
@@ -96,5 +101,5 @@ public class APIReq extends JSONBase implements Serializable{
 			throw new APIException(APIExceptionEnum.FAIL_PROTOCOL_ERROR);
 		}
 	}
-	
+
 }

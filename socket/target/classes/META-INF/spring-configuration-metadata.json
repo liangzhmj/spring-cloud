@@ -1,0 +1,27 @@
+{
+  "groups": [
+    {
+      "name": "socket.netty.client",
+      "type": "com.liangzhmj.cat.socket.netty.config.NettyClientConfig",
+      "sourceType": "com.liangzhmj.cat.socket.netty.config.NettyClientConfig"
+    },
+    {
+      "name": "socket.netty.server",
+      "type": "com.liangzhmj.cat.socket.netty.config.NettyServerConfig",
+      "sourceType": "com.liangzhmj.cat.socket.netty.config.NettyServerConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "socket.netty.client.configs",
+      "type": "java.util.List<com.liangzhmj.cat.socket.netty.config.vo.Config>",
+      "sourceType": "com.liangzhmj.cat.socket.netty.config.NettyClientConfig"
+    },
+    {
+      "name": "socket.netty.server.configs",
+      "type": "java.util.List<com.liangzhmj.cat.socket.netty.config.vo.Config>",
+      "sourceType": "com.liangzhmj.cat.socket.netty.config.NettyServerConfig"
+    }
+  ],
+  "hints": []
+}
