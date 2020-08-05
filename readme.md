@@ -6,7 +6,7 @@
 
   接口路径：/interfaceAction	//对于所有的api路径是一样的
 
-  例子参数: {interId:"100001",version:1,params:{size:1,page:15}} //其中100001是接口编号,params是json形式的扩展参数，不同的api对应不用的业务类，可以添加method参数，在业务类里面实现不用的逻辑。
+  例子参数: {interId:"100001",version:1,params:{size:1,page:15}} //其中100001是接口编号,params是json形式的扩展参数，不同的api对应不用的业务类，可以添加method参数，在业务类里面实现不同的逻辑。
 
   该模块，通过注解使用组件，特色部分有：
 
