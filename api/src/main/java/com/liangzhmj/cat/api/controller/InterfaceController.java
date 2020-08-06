@@ -9,7 +9,7 @@ import com.liangzhmj.cat.api.utils.ServletUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,12 +21,12 @@ public class InterfaceController {
     @Autowired
     private ServiceAgency serviceAgency;
 
-    @PostMapping("/inter")
+    @RequestMapping("/interfaceAction")
     public void inter(HttpServletRequest request, HttpServletResponse response){
         doService(request,response);
     }
 
-    @PostMapping("/interSync")//服务入口类(同步,逻辑完全和InterfaceAction一样，考虑项目规模，一些锁操作主要是基于java内部的实现，
+    @RequestMapping("/interSyncAction")//服务入口类(同步,逻辑完全和InterfaceAction一样，考虑项目规模，一些锁操作主要是基于java内部的实现，
                             // 方便nginx路径区分，做单点同步逻辑（不支持分布式）)
     public void interSync(HttpServletRequest request, HttpServletResponse response){
         doService(request,response);
