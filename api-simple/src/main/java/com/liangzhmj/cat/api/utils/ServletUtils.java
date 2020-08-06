@@ -26,7 +26,7 @@ public class ServletUtils {
      * @param spendtime
      * @throws IOException
      */
-    public static void returnRes(Result result, APIReq req,long spendtime) throws IOException {
+    public static void returnRes(Result result, APIReq req,long spendtime) {
         try {
             HttpServletResponse response = req.getResponse();
             String resultStr = result.toString();

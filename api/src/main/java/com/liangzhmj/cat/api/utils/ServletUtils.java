@@ -26,13 +26,13 @@ public class ServletUtils {
      * @param spendtime
      * @throws IOException
      */
-    public static void returnRes(Result result, APIReq req,long spendtime) throws IOException {
+    public static void returnRes(Result result, APIReq req,long spendtime) {
         try {
             HttpServletResponse response = req.getResponse();
             String resultStr = result.toString();
             log.info("返回码【"+req.getInterId()+"】->耗时:"+spendtime+"ms-->返回数据:"+ StringUtils.substring(1000,resultStr));
             //普通的协议
-            if(req.getCrossDomain() == 1){//jsonp跨域访问
+            if(req.getCrossDomain() == 1){//跨域访问
                 String jsonpCallback = req.getRequest().getParameter("callback");//客户端请求参数
                 write(response,jsonpCallback+"("+resultStr+")");//返回jsonp格式数据
                 return;

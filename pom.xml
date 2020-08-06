@@ -18,9 +18,7 @@
         <module>mq</module>
         <module>dao</module>
         <module>api</module>
-        <module>api-sc</module>
         <module>api-simple</module>
-        <module>api-simple-sc</module>
         <module>tools</module>
         <module>sync</module>
         <module>socket</module>
