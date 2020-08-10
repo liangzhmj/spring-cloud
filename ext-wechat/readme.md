@@ -109,3 +109,6 @@ CREATE TABLE `t_wechat_auth` (
 
 
 
+**注意**
+
+​	该模块部分功能使用到cat-dao的serviceDao

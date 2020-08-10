@@ -45,7 +45,7 @@ public class CustomThreadPool implements BeanDefinitionRegistryPostProcessor, En
             int maxPoolSize = env.getProperty("async.threadpool.customs["+i+"].maxPoolSize",Integer.class,5);
             int keepAliveTime = env.getProperty("async.threadpool.customs["+i+"].keepAliveTime",Integer.class,8);
             int queueCapacity = env.getProperty("async.threadpool.customs["+i+"].queueCapacity",Integer.class,10);
-            String handler = env.getProperty("async.threadpool.customs["+i+"].handler",String.class,"blocking");
+            String handler = env.getProperty("async.threadpool.customs["+i+"].handler",String.class,null);
 
             //1.构造bean定义builder
             BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(ThreadPoolTaskExecutor.class);

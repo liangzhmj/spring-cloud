@@ -7,6 +7,8 @@
         **@EnableSqlMQ**      #sql队列,通过SqlMQ.offer(@NonNull String name, @NonNull String sql)对入列sql进行处理,name为队列名，要在配置文件中配置mq.sqls -name: name
           系统默认生成了offerCommon，offerInsert,offerUpdate,offerDelete,必须要配置对应的name例如：mq.sqls -name: [delete]才会生效
 
+​		**@EnableRabbitMQProducer** #rabbitmq队列，可以动态配置交换机，队列，路由key等信息
+
 ```yml
     #cat-mq配置
     mq:
@@ -46,4 +48,23 @@
           pool2: 2
           interval: 200
           failFilePath: E:/failSqls/delete/
+      rabbits:
+        - queue: cat-q1,cat-q2,cat-q4	#队列，direct(只能有一个)，topic和fanout可以多个
+          durable: true	#队列是否持久化
+          exchange: cat-topic	#交换机名称
+          exchangeType: topic	#交换机类型
+          routingKey: sql.#,action.#,mq.*	#路由key，topic模式，这里必须要和queue的数量对应
+        - queue: cat-q3
+          durable: true
+          exchange: cat-ex3
+          exchangeType: direct
+          routingKey: rkey3
+```
+
+**注意**
+
+​	该模块sqlMQ部分使用cat-dao模块，如果不使用sqlMQ的话，默认引入也是需要数据库连接配置和@EnablexxxDao的，所以如果不用sqlMQ的话，可以在引导类那里修改注解
+
+```java
+@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
 ```
