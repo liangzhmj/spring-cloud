@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -59,10 +60,16 @@ public class APIDocServiceImpl implements APIDocService {
                     if(clazz == null){
                         throw new APIException("class-["+fpackage+"]获取不到数据库字节码");
                     }
+                    int annotationType = 0;//0:注解在类上，1:注解在doServicce方法上
                     Method codeMethod = clazz.getMethod("doService", APIReq.class);
-                    ApiDoc apiDoc = codeMethod.getAnnotation(ApiDoc.class);
+                    ApiDoc apiDoc = clazz.getAnnotation(ApiDoc.class);
                     if(apiDoc == null){
-                        throw new APIException("接口["+interId+"V"+version+"]-["+descr+"]没有声明文档");
+                        log.info("接口["+interId+"V"+version+"]-["+descr+"]在类名上没有声明文档");
+                        apiDoc = codeMethod.getAnnotation(ApiDoc.class);
+                        if(apiDoc == null){
+                            throw new APIException("接口["+interId+"V"+version+"]-["+descr+"]在方法上也没有声明文档");
+                        }
+                        annotationType = 1;
                     }
                     //接口属性
                     JSONObject api = new JSONObject();
@@ -71,7 +78,7 @@ public class APIDocServiceImpl implements APIDocService {
                     api.put("descr",descr);
                     api.put("remark",remark);
                     //参数属性
-                    ApiParams paramArray = codeMethod.getAnnotation(ApiParams.class);
+                    ApiParams paramArray = getAnnotation(clazz,codeMethod,ApiParams.class,annotationType);
                     JSONObject methodJson = new JSONObject();//method-param
                     if(paramArray != null){
                         ApiParam[] params = paramArray.value();
@@ -106,7 +113,7 @@ public class APIDocServiceImpl implements APIDocService {
                         methodJson.putAll(cache);
                     }
                     //没有私有参数的方法
-                    ApiEmptyMethod emptyMethod = codeMethod.getAnnotation(ApiEmptyMethod.class);
+                    ApiEmptyMethod emptyMethod = getAnnotation(clazz,codeMethod,ApiEmptyMethod.class,annotationType);
                     if(emptyMethod != null){
                         String[] vals = emptyMethod.value();
                         for (String val : vals) {
@@ -115,7 +122,7 @@ public class APIDocServiceImpl implements APIDocService {
                     }
                     api.put("methods",methodJson);
                     //响应
-                    ApiResps respsArray = codeMethod.getAnnotation(ApiResps.class);
+                    ApiResps respsArray = getAnnotation(clazz,codeMethod,ApiResps.class,annotationType);
                     if(respsArray != null){
                         ApiResp[] resps = respsArray.value();
                         JSONArray cache = new JSONArray();
@@ -136,6 +143,23 @@ public class APIDocServiceImpl implements APIDocService {
         } catch (Exception e) {
             log.error("初始化文档异常",e);
         }
+    }
+
+    /**
+     * 根据注解类型，获取annotation
+     * @param clazz
+     * @param method
+     * @param anno
+     * @param type
+     * @param <T>
+     * @return
+     */
+    public <T extends Annotation> T getAnnotation(Class<?> clazz, Method method, Class<T> anno, int type){
+        if(type == 0){//类
+            return clazz.getAnnotation(anno);
+        }
+        //方法
+        return method.getAnnotation(anno);
     }
 
     @Override
