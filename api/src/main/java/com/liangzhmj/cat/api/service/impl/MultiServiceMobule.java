@@ -25,7 +25,7 @@ import java.util.Map;
 @Log4j2
 public class MultiServiceMobule implements ServiceModule {
 
-    private Map<String, InterMethodInfo> cache = new HashMap<>();
+    private Map<String, InterMethodInfo> cache;
 
 
     public Object defaultLogic(APIReq req) throws Exception {
@@ -43,10 +43,23 @@ public class MultiServiceMobule implements ServiceModule {
         if(StringUtils.isEmpty(req.getMethod())){
             return defaultLogic(req);//没有定义方法
         }
-        //从缓存里面取
-        InterMethodInfo info = cache.get(req.getMethod());
-        if(info == null){
-            log.info("缓存中缓存["+req.getMethod()+"]对应的方法信息，利用反射机制获取");
+        InterMethodInfo info;
+        if(cache != null){//表示已经加载过缓存了
+            //从缓存里面取
+            info = cache.get(req.getMethod());
+            //处理
+            return dealInterMethod(req,info);
+        }
+        synchronized (this){//加锁严密一点
+            if(cache != null){//二次判断
+                //从缓存里面取
+                info = cache.get(req.getMethod());
+                //处理
+                return dealInterMethod(req,info);
+            }
+            log.info("利用反射机制获取加载缓存信息");
+            //创建空间，同时表示已加载
+            cache = new HashMap<>();
             //获取实现的子类的方法集合
             Method[] methods = this.getClass().getDeclaredMethods();
             if(CollectionUtils.isEmpty(methods)){
@@ -56,36 +69,47 @@ public class MultiServiceMobule implements ServiceModule {
             for (Method method : methods) {
                 //获取注解
                 InterMethod im = method.getAnnotation(InterMethod.class);
-                if(im == null || !im.value().equals(req.getMethod())){
-                    //方法没有添加@InterMethod注解或者method对不上
+                if(im == null){
+                    //方法没有添加@InterMethod注解
                     continue;
                 }
-                log.info("接口["+req.getInterId()+"]存在["+req.getMethod()+"]分支");
-                info = new InterMethodInfo(req.getMethod(),method);
+                log.info("接口["+req.getInterId()+"]存在["+im.value()+"]分支");
+                InterMethodInfo temp = new InterMethodInfo(req.getMethod(),method);
                 //获取预处理
                 Before b = method.getAnnotation(Before.class);
                 if(b != null && !CollectionUtils.isEmpty(b.value())){
-                    log.info("接口["+req.getInterId()+"]的分支["+req.getMethod()+"]存在预处理方法["+ Arrays.toString(b.value())+"]");
+                    log.info("接口["+req.getInterId()+"]的分支["+im.value()+"]存在预处理方法["+ Arrays.toString(b.value())+"]");
                     for(String bname : b.value()){
                         //获取方法
                         Method bm = this.getClass().getMethod(bname,APIReq.class);
-                        info.addBefore(bm);
+                        temp.addBefore(bm);
                     }
                 }
                 //获取后处理
                 After a = method.getAnnotation(After.class);
                 if(a != null && !CollectionUtils.isEmpty(a.value())){
-                    log.info("接口["+req.getInterId()+"]的分支["+req.getMethod()+"]存在后处理方法["+ Arrays.toString(a.value())+"]");
+                    log.info("接口["+req.getInterId()+"]的分支["+im.value()+"]存在后处理方法["+ Arrays.toString(a.value())+"]");
                     for(String aname : a.value()){
                         //获取方法
                         Method am = this.getClass().getMethod(aname,APIReq.class,Object.class);
-                        info.addAfter(am);
+                        temp.addAfter(am);
                     }
                 }
-                cache.put(req.getMethod(),info);//添加缓存
-                break;
+                cache.put(im.value(),temp);//添加缓存
             }
         }
+        info = cache.get(req.getMethod());
+        return dealInterMethod(req,info);//返回结果
+    }
+
+    /**
+     * 处理分支
+     * @param req
+     * @param info
+     * @return
+     * @throws Exception
+     */
+    public Object dealInterMethod(APIReq req,InterMethodInfo info) throws Exception{
         if(info == null){
             throw APIException.simpleException("接口未开通","没有对应method["+req.getMethod()+"]的分支");
         }
