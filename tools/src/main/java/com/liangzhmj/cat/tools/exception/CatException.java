@@ -1,7 +1,6 @@
 package com.liangzhmj.cat.tools.exception;
 
 import lombok.Getter;
-import lombok.NonNull;
 
 @Getter
 public class CatException extends RuntimeException{
@@ -26,7 +25,7 @@ public class CatException extends RuntimeException{
         this.message = bee.getMessage();
     }
 
-    public CatException(CatExceptionEnum bee, @NonNull String ex){
+    public CatException(CatExceptionEnum bee, String ex){
         super(bee.getMessage()+":"+ex);
         this.code = bee.getCode();
         this.message = bee.getMessage()+":"+ex;

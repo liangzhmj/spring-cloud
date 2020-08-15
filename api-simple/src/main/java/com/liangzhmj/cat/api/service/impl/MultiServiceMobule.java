@@ -11,6 +11,7 @@ import com.liangzhmj.cat.tools.collection.CollectionUtils;
 import com.liangzhmj.cat.tools.string.StringUtils;
 import lombok.extern.log4j.Log4j2;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,6 +26,8 @@ import java.util.Map;
 @Log4j2
 public class MultiServiceMobule implements ServiceModule {
 
+    //抛出code为这个的APIException的，直接跳过后面的预处理，例如白名单
+    public static final String BEFORE_SKIP = "9527";
     private Map<String, InterMethodInfo> cache;
 
 
@@ -115,13 +118,41 @@ public class MultiServiceMobule implements ServiceModule {
         }
         //处理预处理
         for (Method bm : info.getBefores()) {
-            req = (APIReq)bm.invoke(this,req);
+            try {
+                req = (APIReq)bm.invoke(this,req);
+            } catch (InvocationTargetException e) {//拆包装
+                if(e.getTargetException() instanceof APIException){
+                    APIException ex = (APIException) e.getTargetException();
+                    if(BEFORE_SKIP.equals(ex.getCode())){//跳过后面的
+                        break;
+                    }
+                    throw ex;
+                }
+                throw e;//其他类型，原样抛出
+            }
         }
         //处理主体逻辑
-        Object res = info.getSelf().invoke(this,req);
+        Object res = null;
+        try {
+            res = info.getSelf().invoke(this,req);
+        } catch (InvocationTargetException e) {//拆包装
+            if(e.getTargetException() instanceof APIException){
+                APIException ex = (APIException) e.getTargetException();
+                throw ex;
+            }
+            throw e;//其他类型，原样抛出
+        }
         //处理后处理
         for (Method am : info.getAfters()) {
-            res = am.invoke(this,req,res);
+            try {
+                res = am.invoke(this,req,res);
+            } catch (InvocationTargetException e) {
+                if(e.getTargetException() instanceof APIException){
+                    APIException ex = (APIException) e.getTargetException();
+                    throw ex;
+                }
+                throw e;//其他类型，原样抛出
+            }
         }
         return res;//返回结果
     }
