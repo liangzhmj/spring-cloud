@@ -24,7 +24,9 @@ public class APIException extends CatException {
     public static APIException showMsg(String showMsg){//由于构造方法单个string参数被占了，因此用静态方法
         return APIException.showMsg(null,showMsg);
     }
-
+    public static APIException simpleException(String showMsg,String message){//由于构造方法单个string参数被占了，因此用静态方法
+        return new APIException(APIExceptionEnum.FAIL_SERVICE_OPERATION.getCode(),showMsg,message);
+    }
     /**
      * 返回直接给用户看的提示信息
      * @param code

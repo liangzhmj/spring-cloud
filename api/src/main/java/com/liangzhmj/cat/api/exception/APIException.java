@@ -36,6 +36,9 @@ public class APIException extends CatException {
         e.setCopyDebugMsg(true);
         return e;
     }
+    public static APIException simpleException(String showMsg,String message){//由于构造方法单个string参数被占了，因此用静态方法
+        return new APIException(APIExceptionEnum.FAIL_SERVICE_OPERATION.getCode(),showMsg,message);
+    }
     public APIException(){}
     public APIException(String message){
         super(message);

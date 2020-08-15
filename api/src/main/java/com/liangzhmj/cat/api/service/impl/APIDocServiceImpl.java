@@ -40,7 +40,7 @@ public class APIDocServiceImpl implements APIDocService {
             if(projectId < 1){
                 throw new APIException("projectId配置错误，请检查,api.projectId");
             }
-            List<Object[]> infos = baseDao.getObjectList("SELECT t1.interId,t1.name,t2.version,t2.fullpackage,t1.remark FROM t_inter t1 JOIN t_inter_class t2 ON(t1.interId=t2.interId) WHERE t2.type=0 AND t2.isUse=1 AND t1.projectId="+projectId+" ORDER BY interId ASC,version ASC");
+            List<Object[]> infos = baseDao.getObjectList("  SELECT t1.interId,t1.name,t2.version,t2.fullpackage,t1.remark FROM t_inter t1 JOIN t_inter_class t2 ON(t1.interId=t2.interId) WHERE t2.type=0 AND t2.isUse=1 AND t1.projectId="+projectId+" ORDER BY interId ASC,version ASC");
             if(CollectionUtils.isEmpty(infos)){
                 throw new APIException("获取不到到接口class");
             }

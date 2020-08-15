@@ -33,8 +33,14 @@ public class APIConfigUtils {
         }
         int end = start+count;
         for (int i = start; i < end; i++) {
-            String sname = "sync"+i;
-            String url = "/realSync"+i;
+            String num = String.valueOf(i);
+            if(i < 10){
+                num = "00"+num;
+            }else if(i < 100){
+                num = "0"+num;
+            }
+            String sname = "sync"+num;
+            String url = "/realSync"+num;
             String sql = "INSERT IGNORE INTO t_inter_sync(sname,projectId,type,servletClass,url,isUse) VALUES('"+sname+"',"+projectId+",0,'com.liangzhmj.cat.api.servlet.DomainAction','"+url+"',1)";
             log.info(">>>>>"+sql);
             baseDao.insertSQL(sql);
